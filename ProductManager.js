@@ -7,18 +7,12 @@ class ProductManager{
     }
 
 
-    addProduct(title, description, price, thumbnail, code, stock, status) {
+    addProduct(title, description, price, thumbnail, code, stock) {
 
         if(!title || !description || !price || !thumbnail || !code || !stock) {
             console.log(`❗ Todos los campos son obligatorios `)
             return;
         }
-
-        // console.log(`El codigo es: ${code} `);
-        // if(this.getProductByCode(code)) {
-        //     console.log(`♦ El producto con el codigo ${code} ya existe `)
-        //     return;
-        // }
 
         const product =  {
             id: this.nextId,
@@ -28,7 +22,6 @@ class ProductManager{
             thumbnail: thumbnail,
             code: code,
             stock: stock,
-            status: status
         };
         this.nextId++;
         this.products.push(product);
@@ -50,33 +43,7 @@ class ProductManager{
         }
         return product;
     }
-
-    updateProduct(id, title, description, price, thumbnail,code, stock, status) {
-        const product = this.getProductById(id)
-        if(!product){
-            return;
-        }
-
-        product.title = title || product.title;
-        product.description = description || product.description;
-        product.price = price || product.price;
-        product.thumbnail = thumbnail || product.thumbnail;
-        product.code = code || product.code;
-        product.stock = stock || product.stock;
-        product.status = status || product.status
-        console.log('Datos Actualizados Correctamente...👌')
-    }
-
-    deleteProduct(id){
-        const productIndex = this.products.findIndex(product => product.id === id);
-        if(productIndex === -1){
-            console.log("Este producto no existe");
-            return;
-        }
-        this.products.splice(productIndex, 1);
-        console.log('Producto Eliminado Correctamente...')
-    }
-
 }
-
-module.exports = ProductManager;
+const producto = new ProductManager()
+producto.addProduct("Coca", "de 1 litro", 400, "imagen", 1000, 200);
+console.log(producto.getProducts())
