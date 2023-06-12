@@ -2,15 +2,15 @@ const fs = require('fs');
 
 class ProductManager {
 
-    constructor() {
+    constructor(path) {
         this.products = [];
-        this.path = 'db.txt';
+        this.path = path;
         this.format = 'utf-8';
         this.nextId = 1;
     }
 
-    addProduct = async (title, description, price, thumbnail, code, stock) =>{
-        
+    addProduct = (title, description, price, thumbnail, code, stock) => {
+
         let newProduct = {
             id: this.nextId,
             title,
@@ -22,68 +22,72 @@ class ProductManager {
         };
         this.nextId++;
         this.products.push(newProduct);
-        await fs.writeFileSync(this.path, JSON.stringify(this.products))
+        fs.writeFileSync(this.path, JSON.stringify(this.products))
         console.log('Productos Agregados Correctamente!!!')
-    }    
+    }
 
-    readProduct = async () => {
+    readProduct = () => {
         if (fs.existsSync(this.path)) {
-            const data = await fs.readFileSync(this.path, this.format)            
+            const data = fs.readFileSync(this.path, this.format)
             return JSON.parse(data);
         } else return []
-    }    
+    }
 
-    getProducts = async () => {
-        try {
-            let res = await this.readProduct();
-            return console.log(res);
-        } catch (error) {
-            console.log('No se encontro el archivo', error)        
+    getProducts = () => {
+
+        let res = this.readProduct();
+        return console.log(res);
+
+    }
+
+    getProductById = (id) => {
+       
+        let respuesta = this.readProduct();
+        if (!respuesta.find(product => product.id === id)) {
+            console.log('Producto no encontrado');
+        } else {
+            console.log(respuesta.find(product => product.id === id))
         }
     }
 
-    getProductById = async (id) => {
-        try {
-            let respuesta = await this.readProduct();
-            if(!respuesta.find(product => product.id === id)){
-              console.log('Producto no encontrado');
-            } else {
-                console.log(respuesta.find(product => product.id === id))
-            }       
-        } catch (error) {
-            console.log('Ocurrio un error al leer el archivo', error)
-        }
-    }
-    
-    deleteProduct = async (id) => {
-        let respuesta = await this.readProduct();
+    deleteProduct = (id) => {
+        let respuesta = this.readProduct();
         let filter = respuesta.filter(product => product.id != id)
-        await fs.writeFileSync(this.path, JSON.stringify(filter));
-        console.log('Producto Eliminado Correctamente !!!')
+        !filter ? (
+            fs.writeFileSync(this.path, JSON.stringify(filter)),
+            console.log('Producto Eliminado Correctamente !!!')
+        ) : (
+            console.log('No se encuentro el producto !!!')
+        );
     }
 
-    updateProduct = async ({id, ...producto }) => {
-       await this.deleteProduct(id);
-       let productPreview = await this.readProduct();
-       let productUpdate = [{ id, ...producto}, ...productPreview];
-       await fs.writeFileSync(this.path, JSON.stringify(productUpdate));
+    updateProduct = (id, updateProperties) => {
+        let listProduct = this.readProduct();                         
+        let productPreview = listProduct.filter(product => product.id != id)
+        let productUpdate = listProduct.find(product => product.id === id)
+        
+        console.log('objeto previo:',productPreview)
+        console.log('objeto a actualizar:',productUpdate)
+        console.log('objeto actualizado',updateProperties)
+        
+        if (productUpdate){
+          let objetPrimary = Object.assign({}, productUpdate, updateProperties)                        
+          console.log('El objeto q se actualizo quedo asi', objetPrimary)
+          let objetFinal = [objetPrimary, ...productPreview, ]
+          console.log('El objeto final queda asi: ', objetFinal)
+                  
+          fs.writeFileSync(this.path, JSON.stringify(objetFinal));
+
+          console.log('Producto Actualizado Correctamente !!!')
+        }                            
     }
 }
 
-
-const producto = new ProductManager()
-producto.addProduct(1, "producto 1", "description 1", 200, "Sin imagen", "abc123", 25);
-producto.addProduct(2, "producto 2", "description 2", 100, "Sin imagen", "abc123", 40);
-producto.addProduct(3, "producto 3", "description 3", 500, "Sin imagen", "abc123", 100);
+const producto = new ProductManager('db.txt')
+producto.addProduct("producto 1", "description 1", 200, "Sin imagen", "abc123", 25);
+producto.addProduct("producto 2", "description 2", 100, "Sin imagen", "abc123", 40);
+producto.addProduct("producto 3", "description 3", 500, "Sin imagen", "abc123", 100);
 // producto.getProducts();
-// producto.getProductById(4);
-// producto.deleteProduct(2)
-// producto.updateProduct({
-//     title:"producto modificado",
-//     description:"description modificada",
-//     price:50, 
-//     thumbnail:"Sin imagen",
-//     code:"abc136",
-//     stock:10,
-//     id:3, 
-// });
+// producto.getProductById(1);
+// producto.deleteProduct(5)
+console.log(producto.updateProduct(1, {title:'producto actualizado', description:'nueva descripcion', stock:44}));
