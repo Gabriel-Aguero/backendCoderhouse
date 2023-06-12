@@ -64,20 +64,12 @@ class ProductManager {
     updateProduct = (id, updateProperties) => {
         let listProduct = this.readProduct();                         
         let productPreview = listProduct.filter(product => product.id != id)
-        let productUpdate = listProduct.find(product => product.id === id)
-        
-        console.log('objeto previo:',productPreview)
-        console.log('objeto a actualizar:',productUpdate)
-        console.log('objeto actualizado',updateProperties)
+        let productUpdate = listProduct.find(product => product.id === id)               
         
         if (productUpdate){
-          let objetPrimary = Object.assign({}, productUpdate, updateProperties)                        
-          console.log('El objeto q se actualizo quedo asi', objetPrimary)
-          let objetFinal = [objetPrimary, ...productPreview, ]
-          console.log('El objeto final queda asi: ', objetFinal)
-                  
+          let objetPrimary = Object.assign({}, productUpdate, updateProperties)                                  
+          let objetFinal = [objetPrimary, ...productPreview, ]                            
           fs.writeFileSync(this.path, JSON.stringify(objetFinal));
-
           console.log('Producto Actualizado Correctamente !!!')
         }                            
     }
