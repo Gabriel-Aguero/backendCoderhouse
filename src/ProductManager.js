@@ -76,9 +76,9 @@ export default class ProductManager {
     }
 }
 
-const producto = new Product('db.txt')
-producto.addProduct("producto 1", "description 1", 200, "Sin imagen", "abc123", 25);
-producto.addProduct("producto 2", "description 2", 100, "Sin imagen", "abc123", 40);
-producto.addProduct("producto 3", "description 3", 500, "Sin imagen", "abc123", 100);
-producto.getProducts();
+// const producto = new ProductManager('db.txt')
+// producto.addProduct("producto 1", "description 1", 200, "Sin imagen", "abc123", 25);
+// producto.addProduct("producto 2", "description 2", 100, "Sin imagen", "abc123", 40);
+// producto.addProduct("producto 3", "description 3", 500, "Sin imagen", "abc123", 100);
+// producto.getProducts();
 // module.exports = ProductManager;

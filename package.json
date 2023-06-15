@@ -1,0 +1,23 @@
+{
+  "name": "backendcoderhouse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "PropductManager.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gabriel-Aguero/backendCoderhouse.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gabriel-Aguero/backendCoderhouse/issues"
+  },
+  "homepage": "https://github.com/Gabriel-Aguero/backendCoderhouse#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
