@@ -9,7 +9,7 @@ class ProductManager {
     addProduct(title, description, price, thumbnail, code, stock) {
 
             if (!title || !description || !price || !thumbnail || !code || !stock) {
-                console.log(`❗ Todos los campos son obligatorios `);            
+                console.log(`❗ Todos los campos son obligatorios ❌`);            
             } else{
                 if(this.getProductByCode(code)) {                    
                     console.log(`♦ El producto con el codigo ${code} ya existe `)
