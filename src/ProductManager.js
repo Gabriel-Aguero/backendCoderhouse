@@ -1,4 +1,3 @@
-// const fs = require('fs');
 import fs from 'fs';
 
 export default class ProductManager {
@@ -30,14 +29,14 @@ export default class ProductManager {
     readProduct = () => {
         if (fs.existsSync(this.path)) {
             const data = fs.readFileSync(this.path, this.format)
-            return JSON.parse(data);
+            return JSON.parse(data);           
         } else return []
     }
 
     getProducts = () => {
 
-        let res = this.readProduct();
-        return console.log(res);
+        let res = this.readProduct();       
+        return res;
 
     }
 
