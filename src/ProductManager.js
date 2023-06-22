@@ -9,45 +9,60 @@ export default class ProductManager {
         this.nextId = 1;
     }
 
-    addProduct = (title, description, price, thumbnail, code, stock) => {
-
-        let newProduct = {
-            id: this.nextId,
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock,
-        };
-        this.nextId++;
-        this.products.push(newProduct);
-        fs.writeFileSync(this.path, JSON.stringify(this.products))
-        console.log('Productos Agregados Correctamente!!!')
-    }
-
-    readProduct = () => {
-        if (fs.existsSync(this.path)) {
-            const data = fs.readFileSync(this.path, this.format)
-            return JSON.parse(data);           
-        } else return []
-    }
-
-    getProducts = () => {
-
-        let res = this.readProduct();       
-        return res;
-
-    }
-
-    getProductById = (id) => {
-       
-        let respuesta = this.readProduct();
-        if (!respuesta.find(product => product.id === id)) {
-            console.log('Producto no encontrado');
-        } else {
-            console.log(respuesta.find(product => product.id === id))
+    addProduct = async(title, description, price, thumbnail, code, stock) => {
+        try {
+            let newProduct = {
+                id: this.nextId,
+                title,
+                description,
+                price,
+                thumbnail,
+                code,
+                stock,
+            };
+            this.nextId++;
+            this.products.push(newProduct);
+            await fs.promises.writeFile(this.path, JSON.stringify(this.products))
+            console.log('Productos Agregados Correctamente!!!')
+            
+        } catch (error) {
+            console.log(message.error);    
         }
+    }
+
+    readProduct = async() => {
+        
+        try {
+            const data = await fs.promises.readFile(this.path, this.format)               
+            return JSON.parse(data);                       
+        } catch (error) {
+        console.log(message.error) 
+        }
+        
+    }
+
+    getProducts = async() => {
+        try {
+            let res = await this.readProduct();       
+            return res;            
+        } catch (error) {
+          console.log(message.error)  
+        }
+
+    }
+
+    getProductById = async(id) => {
+       try {
+           let productos = await this.readProduct();           
+           let respuesta = productos.find(product => product.id === id)
+           if (!respuesta) {
+               return `<h1 style="blue">Not Found</h1>`;
+           } else {
+               return respuesta;
+           }
+       } catch (error) {
+         console.log(error,'Error al realizar la busqueda por ID')
+       }
     }
 
     deleteProduct = (id) => {
