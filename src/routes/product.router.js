@@ -1,23 +1,9 @@
 import { Router } from 'express'
 import ProductManager from '../manager/producManager.js'
-import multer from 'multer'
 
 const router = Router()
 const productManager = new ProductManager()
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, '../public/thumbnail')
-    }, filename: function (req, file, cb) {
-        cb(null, new Date().getTime() + "-" + file.originalname)
-    }
-}) 
-const loader = multer({storage})
-
-router.post('/uploader', loader.single('file'), (req, res) => {
-    if(!req.file) return res.send({message: 'error'})
-    res.send({status: 'File uploaded'})
-})
 
 router.get('/', async (req, res) => {
     const limit = req.query.limit;
@@ -38,9 +24,16 @@ router.get('/:id', async (req, res) => {
 })
 
 router.put('/:id', async (req, res) => {
-    const id = req.params.id
-    const result = await productManager.getById(id)
-    res.send(result)
+    const  id  = parseInt(req.params.id);
+    const data = req.body
+   
+   try {
+       const result = await productManager.update(id, data)    
+       !result ? res.send(`${result}, <p>Producto Actualizado ✅!!!</p>`)  : res.status(404).json({error404: `Producto ${id} no encontrado`})
+   } catch (error) {
+    res.status(404).json({error404: `Error`})
+   }
+    
 })
 
 router.post('/', async (req, res) => {

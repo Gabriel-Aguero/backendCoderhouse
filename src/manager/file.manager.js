@@ -20,7 +20,7 @@ class FileManager {
 
     getById = async (id) => {
         const data = await this.get()
-        return data.find(d => d.id == id)
+        return data.find(d => d.id == id)        
     }
 
     set = async (data) => {
@@ -30,11 +30,10 @@ class FileManager {
         return fs.promises.writeFile(this.filename, JSON.stringify(list))
     }
 
-    update = async (data) => {
+    update = async (id, data) => {
         const list = await this.get()
-        const idx = list.findIndex(a => a.id == data.id)
-        list[idx] = data
-        
+        const idx = list.findIndex(a => a.id === id)        
+        Object.assign(list[idx], data)                 
         return fs.promises.writeFile(this.filename, JSON.stringify(list))
     }
 
